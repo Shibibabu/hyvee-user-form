@@ -3,6 +3,7 @@
  run the following command in the root directory.
 
 ```
+ clone this repository
  cd hyvee-user-form
  npm install
  npm run dev
