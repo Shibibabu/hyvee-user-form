@@ -10,8 +10,9 @@
 
 ```
 
-Follow this steps to create a service account in GCP [here](https://ai2.appinventor.mit.edu/reference/other/googlesheets-api-setup.html)
-Use the client email and private key and spreadsheet id with your id 
+> Follow this steps to create a service account in GCP [here](https://ai2.appinventor.mit.edu/reference/other/googlesheets-api-setup.html)
+Use the client email and private key 
+> Create a spreadsheet and use [link](https://apipheny.io/) for enabling APIPHENY endpoint.
 ```
 Create a .env file with following data 
 REACT_APP_GOOGLE_CLIENT_EMAIL
