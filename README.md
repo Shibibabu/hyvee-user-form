@@ -9,9 +9,8 @@
 
 ```
 
-Follow this steps to create a service account in GCP
-Load [GCP Setup](https://dev.to/calvinpak/how-to-read-write-google-sheets-with-react-193l)
-
+Follow this steps to create a service account in GCP [here](https://ai2.appinventor.mit.edu/reference/other/googlesheets-api-setup.html)
+Use the client email and private key and spreadsheet id with your id 
 ```
 Create a .env file with following data 
 REACT_APP_GOOGLE_CLIENT_EMAIL
