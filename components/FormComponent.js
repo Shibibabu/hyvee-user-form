@@ -2,28 +2,72 @@ import { useState } from "react";
 import axios from "axios";
 import "../styles/main.scss";
 const FormComponent = () => {
-  const [formData, setFormData] = useState({
-    age: "",
-    nationality: "",
-    gender: "",
-    name: "",
-  });
-
+  const [name, setName] = useState("");
+  const [result, setResult] = useState({});
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setName(value);
+    setResult({});
+  };
+
+  const getAge = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let data = await axios.get(`https://api.agify.io?name=${name}`);
+        if (data.data?.age) {
+          resolve(data.data.age);
+        } else {
+          resolve("N/A");
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const getNationality = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let data = await axios.get(`https://api.nationalize.io?name=${name}`);
+        if (data.data?.country?.[0]?.country_id) {
+          resolve(data.data.country[0]?.country_id);
+        } else {
+          resolve("N/A");
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const getGender = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let data = await axios.get(`https://api.genderize.io?name=${name}`);
+        if (data.data?.gender) {
+          resolve(data.data.gender);
+        } else {
+          resolve("N/A");
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/saveData", formData);
-      alert("Data saved successfully!");
+      const [age, nationality, gender] = await Promise.all([
+        getAge(),
+        getNationality(),
+        getGender(),
+      ]);
+      setResult({ age, nationality, gender });
     } catch (error) {
       console.error("Error saving data:", error);
     }
   };
-
   return (
     <div className="container">
       <div className="card">
@@ -39,46 +83,44 @@ const FormComponent = () => {
               type="text"
               name="name"
               className="input-field"
-              value={formData.name}
+              value={name}
               onChange={handleChange}
               required
             />
             <label className="input-label">Name</label>
           </div>
-          <div className="input">
-            <input
-              type="number"
-              name="age"
-              className="input-field"
-              value={formData.age}
-              onChange={handleChange}
-              required
-              min={1}
-            />
-            <label className="input-label">Age</label>
-          </div>
-          <div className="input">
-            <input
-              type="text"
-              name="nationality"
-              className="input-field"
-              value={formData.nationality}
-              onChange={handleChange}
-              required
-            />
-            <label className="input-label">Nationality</label>
-          </div>
-          <div className="input">
-            <input
-              type="text"
-              name="gender"
-              className="input-field"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-            />
-            <label className="input-label">Gender</label>
-          </div>
+          {result && Object.keys(result)?.length > 0 && (
+            <>
+              <div className="input">
+                <input
+                  type="text"
+                  name="age"
+                  className="input-field"
+                  value={result.age}
+                />
+                <label className="input-label">Age</label>
+              </div>
+              <div className="input">
+                <input
+                  type="text"
+                  name="nationality"
+                  className="input-field"
+                  value={result.nationality}
+                />
+                <label className="input-label">Nationality</label>
+              </div>
+              <div className="input">
+                <input
+                  type="text"
+                  name="gender"
+                  className="input-field"
+                  value={result.gender}
+                />
+                <label className="input-label">Gender</label>
+              </div>
+            </>
+          )}
+
           <div className="action">
             <button className="action-button">Submit</button>
           </div>
